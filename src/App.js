@@ -44,9 +44,6 @@ const App = () => {
             <Menu.Item key="2">
               <Link to="/projects">Projects</Link>
             </Menu.Item>
-            <Menu.Item key="3">
-              <Link to="/assign-employee">Assign Employee</Link>
-            </Menu.Item>
           </Menu>
         </Header>
         <Content style={{ padding: '0 50px' }}>
