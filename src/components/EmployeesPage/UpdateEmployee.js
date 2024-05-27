@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { EmployeeApi } from '../../api/employees';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdateEmployee = () => {
     const { employeeId } = useParams();
+    const navigate = useNavigate();
+
     const [employeeData, setEmployeeData] = useState({
         Id: employeeId,
         FirstName: '',
@@ -44,7 +46,7 @@ const UpdateEmployee = () => {
         const { updateEmployee } = new EmployeeApi();
         try {
             await updateEmployee(employeeData);
-            // Optionally, navigate to another page or show a success message
+            navigate('/employees'); // Navigate to the main page after successful update
         } catch (error) {
             console.error("Error updating employee:", error);
         }

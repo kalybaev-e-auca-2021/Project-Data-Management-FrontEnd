@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProjectApi } from '../../api/projects';
-import { useParams } from 'react-router-dom';
-
+import { useParams, useNavigate } from 'react-router-dom';
 
 function UpdateProject() {
-
     const { projectId } = useParams();
+    const navigate = useNavigate();
 
     const [projectData, setProjectData] = useState({
         Id: projectId,
@@ -17,6 +16,28 @@ function UpdateProject() {
         FinishProjectDate: ''
     });
 
+    useEffect(() => {
+        fetchProjectDetails(projectId);
+    }, [projectId]);
+
+    const fetchProjectDetails = async (projectId) => {
+        const { getProject } = new ProjectApi();
+        try {
+            const res = await getProject(projectId);
+            setProjectData({
+                Id: projectId,
+                Name: res.data.name,
+                ClientCompanyName: res.data.clientCompanyName,
+                PerformerCompanyName: res.data.performerCompanyName,
+                Priority: res.data.priority,
+                StartProjectDate: res.data.startProjectDate,
+                FinishProjectDate: res.data.finishProjectDate
+            });
+        } catch (error) {
+            console.error("Error fetching project details:", error);
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProjectData(prevData => ({
@@ -27,16 +48,12 @@ function UpdateProject() {
 
     const fetchUpdateProject = async () => {
         const { updateProject } = new ProjectApi();
-        await updateProject(projectData);
-        setProjectData({
-            Name: '',
-            ClientCompanyName: '',
-            PerformerCompanyName: '',
-            Priority: 'High',
-            StartProjectDate: '',
-            FinishProjectDate: '',
-            Id: projectId,
-        });
+        try {
+            await updateProject(projectData);
+            navigate('/projects'); // Navigate to the main page after successful update
+        } catch (error) {
+            console.error("Error updating project:", error);
+        }
     };
 
     const handleSubmit = (e) => {
