@@ -29,14 +29,13 @@ const App = () => {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
           }}
         >
           <Menu
             theme="dark"
             mode="horizontal"
             defaultSelectedKeys={['1']}
-            style={{ lineHeight: '64px' }}
+            style={{ lineHeight: '64px', width: '100%', justifyContent: 'center' }}
           >
             <Menu.Item key="1">
               <Link to="/employees">Employees</Link>
@@ -46,13 +45,14 @@ const App = () => {
             </Menu.Item>
           </Menu>
         </Header>
-        <Content style={{ padding: '0 50px' }}>
+        <Content style={{ padding: '0 50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div
             style={{
               padding: 24,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
-              flex: 1,
+              width: '100%',
+              maxWidth: '1200px', // Limit the max width
             }}
           >
             <Routes>
@@ -63,8 +63,8 @@ const App = () => {
               <Route path="/employee/update/:employeeId" element={<UpdateEmployee />} />
               <Route path="/project/create" element={<CreateProject />} />
               <Route path="/employee/create" element={<CreateEmployee />} />
-              <Route path="/project/:projectId" element={<ProjectDetails />} /> {/* Adjusted to match parameter */}
-              <Route path="/employee/:employeeId" element={<EmployeeDetails />} /> {/* Adjusted to match parameter */}
+              <Route path="/project/:projectId" element={<ProjectDetails />} />
+              <Route path="/employee/:employeeId" element={<EmployeeDetails />} />
             </Routes>
           </div>
         </Content>

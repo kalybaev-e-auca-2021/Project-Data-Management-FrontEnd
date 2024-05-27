@@ -33,4 +33,10 @@ export class ProjectApi {
             params: { id },
         })
     }
+
+    async deleteProject(id) {
+        return await contextApi.delete(`/Project/deleteProject`, {
+            params: { id },
+        })
+    }
 }

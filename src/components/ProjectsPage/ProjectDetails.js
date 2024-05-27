@@ -37,21 +37,37 @@ const ProjectDetails = () => {
     };
 
     const handleAssignEmployee = () => {
-        // Logic to assign selectedEmployee to the project
         console.log('Selected Employee:', selectedEmployee);
+    };
+
+    const handleDeleteProject = async () => {
+        const { deleteProject } = new ProjectApi();
+        await deleteProject(projectId);
+        navigate('/projects');
     };
 
     return (
         <div>
             <Box display="flex" justifyContent="space-between" alignItems="center" padding="16px">
                 <h1>Project Details</h1>
-                <Button
-                    type="primary"
-                    variant="contained"
-                    onClick={() => navigate(`/project/update/${projectId}`)}
-                >
-                    Update Project Details
-                </Button>
+                <Box>
+                    <Button
+                        type="primary"
+                        variant="contained"
+                        onClick={() => navigate(`/project/update/${projectId}`)}
+                        style={{ marginRight: '8px' }}
+                    >
+                        Update Project Details
+                    </Button>
+                    <Button
+                        type="primary"
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleDeleteProject}
+                    >
+                        Delete Project
+                    </Button>
+                </Box>
             </Box>
             {projectDetails && ( // Conditional rendering
                 <Box padding="16px">

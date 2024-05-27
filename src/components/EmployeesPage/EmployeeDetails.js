@@ -6,13 +6,13 @@ import { Button, Box } from '@mui/material';
 const EmployeeDetails = () => {
     const { employeeId } = useParams();
     const [employeeDetails, setEmployeeDetails] = useState(null);
-    const [employeeProjects, setEmployeeProjects] = useState([]); // State to store employee projects
+    const [employeeProjects, setEmployeeProjects] = useState([]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchEmployeeDetails(employeeId);
-        fetchEmployeeProjects(employeeId); // Fetch projects when employeeId changes
+        fetchEmployeeProjects(employeeId);
     }, [employeeId]);
 
     const fetchEmployeeDetails = async (employeeId) => {
@@ -29,11 +29,21 @@ const EmployeeDetails = () => {
         const { getProjectsOfEmployee } = new EmployeeApi();
         try {
             const res = await getProjectsOfEmployee(employeeId);
-            console.log("Fetched employee projects:", res.data); // Debugging line
-            setEmployeeProjects(Array.isArray(res.data) ? res.data : []); // Ensure it's an array
+            console.log("Fetched employee projects:", res.data);
+            setEmployeeProjects(Array.isArray(res.data) ? res.data : []);
         } catch (error) {
             console.error("Error fetching employee projects:", error);
-            setEmployeeProjects([]); // Ensure it is set as an array even if there's an error
+            setEmployeeProjects([]);
+        }
+    };
+
+    const handleDeleteEmployee = async () => {
+        const { deleteEmployee } = new EmployeeApi();
+        try {
+            await deleteEmployee(employeeId);
+            navigate('/employees');
+        } catch (error) {
+            console.error("Error deleting employee:", error);
         }
     };
 
@@ -45,13 +55,24 @@ const EmployeeDetails = () => {
         <div>
             <Box display="flex" justifyContent="space-between" alignItems="center" padding="16px">
                 <h1>Employee Details</h1>
-                <Button
-                    type="primary"
-                    variant="contained"
-                    onClick={() => navigate(`/employee/update/${employeeId}`)}
-                >
-                    Update Employee Details
-                </Button>
+                <Box>
+                    <Button
+                        type="primary"
+                        variant="contained"
+                        onClick={() => navigate(`/employee/update/${employeeId}`)}
+                        style={{ marginRight: '8px' }}
+                    >
+                        Update Employee Details
+                    </Button>
+                    <Button
+                        type="primary"
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleDeleteEmployee}
+                    >
+                        Delete Employee
+                    </Button>
+                </Box>
             </Box>
             <Box padding="16px">
                 <div>

@@ -27,4 +27,9 @@ export class EmployeeApi {
             params: { id },
         })
     }
+    async deleteEmployee(id) {
+        return await contextApi.delete(`/Project/deleteEmployee`, {
+            params: { id },
+        })
+    }
 }
