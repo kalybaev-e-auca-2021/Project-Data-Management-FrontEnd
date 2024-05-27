@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { EmployeeApi } from '../../api/employees';
 
-function CreateEmployee() {
+const CreateEmployee = () => {
+    const navigate = useNavigate(); // Create a navigate function
 
-    const [employeeData, setemployeeData] = useState({
+    const [employeeData, setEmployeeData] = useState({
         FirstName: '',
         LastName: '',
         SurName: '',
@@ -12,26 +14,31 @@ function CreateEmployee() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setemployeeData(prevData => ({
+        setEmployeeData(prevData => ({
             ...prevData,
             [name]: value
         }));
     };
 
-    const fetchUpdateEmployee = async () => {
+    const fetchCreateEmployee = async () => {
         const { createEmployee } = new EmployeeApi();
-        await createEmployee(employeeData);
-        setemployeeData({
-            FirstName: '',
-            LastName: '',
-            SurName: '',
-            Email: '',
-        });
+        try {
+            await createEmployee(employeeData);
+            setEmployeeData({
+                FirstName: '',
+                LastName: '',
+                SurName: '',
+                Email: '',
+            });
+            navigate('/employees'); // Redirect to the main page after creating the employee
+        } catch (error) {
+            console.error("Error creating employee:", error);
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchUpdateEmployee();
+        fetchCreateEmployee();
     };
 
     return (
@@ -47,7 +54,7 @@ function CreateEmployee() {
                 />
             </label>
             <label style={{ display: 'block', marginBottom: '10px' }}>
-                Last Name
+                Last Name:
                 <input
                     type="text"
                     name="LastName"
@@ -57,7 +64,7 @@ function CreateEmployee() {
                 />
             </label>
             <label style={{ display: 'block', marginBottom: '10px' }}>
-                SurName
+                SurName:
                 <input
                     type="text"
                     name="SurName"
@@ -67,7 +74,7 @@ function CreateEmployee() {
                 />
             </label>
             <label style={{ display: 'block', marginBottom: '10px' }}>
-                Email Address
+                Email Address:
                 <input
                     type="text"
                     name="Email"
@@ -84,6 +91,6 @@ function CreateEmployee() {
             </button>
         </form>
     );
-}
+};
 
 export default CreateEmployee;

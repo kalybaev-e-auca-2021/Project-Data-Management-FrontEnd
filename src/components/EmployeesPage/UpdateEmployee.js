@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EmployeeApi } from '../../api/employees';
 import { useParams } from 'react-router-dom';
 
-
-function UpdateEmployee() {
-
+const UpdateEmployee = () => {
     const { employeeId } = useParams();
-
-    console.log(employeeId);
-    const [employeeData, setemployeeData] = useState({
+    const [employeeData, setEmployeeData] = useState({
         Id: employeeId,
         FirstName: '',
         LastName: '',
@@ -16,9 +12,29 @@ function UpdateEmployee() {
         Email: ''
     });
 
+    useEffect(() => {
+        fetchEmployeeDetails(employeeId);
+    }, [employeeId]);
+
+    const fetchEmployeeDetails = async (employeeId) => {
+        const { getEmployeeDetails } = new EmployeeApi();
+        try {
+            const res = await getEmployeeDetails(employeeId);
+            setEmployeeData({
+                Id: employeeId,
+                FirstName: res.data.firstName,
+                LastName: res.data.lastName,
+                SurName: res.data.surName,
+                Email: res.data.email
+            });
+        } catch (error) {
+            console.error("Error fetching employee details:", error);
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setemployeeData(prevData => ({
+        setEmployeeData(prevData => ({
             ...prevData,
             [name]: value
         }));
@@ -26,14 +42,12 @@ function UpdateEmployee() {
 
     const fetchUpdateEmployee = async () => {
         const { updateEmployee } = new EmployeeApi();
-        await updateEmployee(employeeData);
-        setemployeeData({
-            FirstName: '',
-            LastName: '',
-            SurName: '',
-            Email: '',
-            Id: employeeId
-        });
+        try {
+            await updateEmployee(employeeData);
+            // Optionally, navigate to another page or show a success message
+        } catch (error) {
+            console.error("Error updating employee:", error);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -54,7 +68,7 @@ function UpdateEmployee() {
                 />
             </label>
             <label style={{ display: 'block', marginBottom: '10px' }}>
-                Last Name
+                Last Name:
                 <input
                     type="text"
                     name="LastName"
@@ -64,7 +78,7 @@ function UpdateEmployee() {
                 />
             </label>
             <label style={{ display: 'block', marginBottom: '10px' }}>
-                SurName
+                SurName:
                 <input
                     type="text"
                     name="SurName"
@@ -74,7 +88,7 @@ function UpdateEmployee() {
                 />
             </label>
             <label style={{ display: 'block', marginBottom: '10px' }}>
-                Email Address
+                Email Address:
                 <input
                     type="text"
                     name="Email"
@@ -87,10 +101,10 @@ function UpdateEmployee() {
                 type="submit"
                 style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
             >
-                Update Emplyee Info
+                Update Employee Info
             </button>
         </form>
     );
-}
+};
 
 export default UpdateEmployee;

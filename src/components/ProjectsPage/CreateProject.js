@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProjectApi } from '../../api/projects';
 
-
-function CreateProject() {
+const CreateProject = () => {
+    const navigate = useNavigate(); // Create a navigate function
 
     const [projectData, setProjectData] = useState({
         Name: '',
@@ -21,22 +22,27 @@ function CreateProject() {
         }));
     };
 
-    const fetchUpdateProject = async () => {
+    const fetchCreateProject = async () => {
         const { createProject } = new ProjectApi();
-        await createProject(projectData);
-        setProjectData({
-            Name: '',
-            ClientCompanyName: '',
-            PerformerCompanyName: '',
-            Priority: 'High',
-            StartProjectDate: '',
-            FinishProjectDate: '',
-        });
+        try {
+            await createProject(projectData);
+            setProjectData({
+                Name: '',
+                ClientCompanyName: '',
+                PerformerCompanyName: '',
+                Priority: 'High',
+                StartProjectDate: '',
+                FinishProjectDate: '',
+            });
+            navigate('/projects'); // Redirect to the main page after creating the project
+        } catch (error) {
+            console.error("Error creating project:", error);
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchUpdateProject();
+        fetchCreateProject();
     };
 
     return (
@@ -112,6 +118,6 @@ function CreateProject() {
             </button>
         </form>
     );
-}
+};
 
 export default CreateProject;
