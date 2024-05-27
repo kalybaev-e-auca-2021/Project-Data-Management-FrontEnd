@@ -21,9 +21,9 @@ function UpdateProject() {
     }, [projectId]);
 
     const fetchProjectDetails = async (projectId) => {
-        const { getProject } = new ProjectApi();
+        const { getProjectDetails } = new ProjectApi();
         try {
-            const res = await getProject(projectId);
+            const res = await getProjectDetails(projectId);
             setProjectData({
                 Id: projectId,
                 Name: res.data.name,
