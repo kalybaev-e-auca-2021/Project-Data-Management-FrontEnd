@@ -39,4 +39,9 @@ export class ProjectApi {
             params: { id },
         })
     }
+    async assignEmployee(idE, idP) {
+        return await contextApi.post(`/Project/assignEmployee`, null, {
+            params: { idE, idP }
+        });
+    }
 }

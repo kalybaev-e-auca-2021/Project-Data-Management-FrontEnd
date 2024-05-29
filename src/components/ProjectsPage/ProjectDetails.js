@@ -30,14 +30,15 @@ const ProjectDetails = () => {
         const { getEmployeesOfProject, getNotAssignedProjectEmployees } = new ProjectApi();
         const assignedRes = await getEmployeesOfProject(projectId);
         const notAssignedRes = await getNotAssignedProjectEmployees(projectId);
-        console.log('Assigned Employee API Response:', assignedRes);
-        console.log('Not Assigned Employee API Response:', notAssignedRes);
-        setAssignedEmployees(Array.isArray(assignedRes.data) ? assignedRes.data : []);
-        setNotAssignedEmployees(Array.isArray(notAssignedRes.data.Employees) ? notAssignedRes.data.Employees : []);
+        setAssignedEmployees(assignedRes.data.employees);
+        setNotAssignedEmployees(notAssignedRes.data.employees);
     };
 
-    const handleAssignEmployee = () => {
-        console.log('Selected Employee:', selectedEmployee);
+    const handleAssignEmployee = async () => {
+        const { assignEmployee } = new ProjectApi();
+        await assignEmployee(selectedEmployee, projectId);
+        setSelectedEmployee(''); // Reset the select input
+        await fetchEmployees(projectId); // Refresh the employee lists
     };
 
     const handleDeleteProject = async () => {

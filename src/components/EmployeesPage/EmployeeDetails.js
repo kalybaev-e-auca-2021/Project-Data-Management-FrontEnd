@@ -17,24 +17,14 @@ const EmployeeDetails = () => {
 
     const fetchEmployeeDetails = async (employeeId) => {
         const { getEmployeeDetails } = new EmployeeApi();
-        try {
-            const res = await getEmployeeDetails(employeeId);
-            setEmployeeDetails(res.data);
-        } catch (error) {
-            console.error("Error fetching employee details:", error);
-        }
+        const res = await getEmployeeDetails(employeeId);
+        setEmployeeDetails(res.data);
     };
 
     const fetchEmployeeProjects = async (employeeId) => {
         const { getProjectsOfEmployee } = new EmployeeApi();
-        try {
-            const res = await getProjectsOfEmployee(employeeId);
-            console.log("Fetched employee projects:", res.data);
-            setEmployeeProjects(Array.isArray(res.data) ? res.data : []);
-        } catch (error) {
-            console.error("Error fetching employee projects:", error);
-            setEmployeeProjects([]);
-        }
+        const res = await getProjectsOfEmployee(employeeId);
+        setEmployeeProjects(res.data.projects);
     };
 
     const handleDeleteEmployee = async () => {
